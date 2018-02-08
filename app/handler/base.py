@@ -6,11 +6,13 @@ import time
 import tornado.web
 import traceback
 from tornado.web import HTTPError
+from app.config import config
 
 class BaseHandler(tornado.web.RequestHandler):
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
+        self.mongodb = config.mongodb
 
     def get(self, *args, **kwargs):
         raise HTTPError(404)

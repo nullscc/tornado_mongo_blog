@@ -6,6 +6,7 @@ import os
 import json
 import tornado.options
 from tornado.options import define, options
+import motor
 
 define("mode", default="", help="mode", type=str)
 tornado.options.parse_command_line()
@@ -26,6 +27,7 @@ def init_config():
     else:
         mode = os.environ.get('MODE')
     config = load_config(mode)
+    config.mongodb = motor.motor_tornado.MotorClient(config.mongo_url)[config.mongo_database]
     config.mode = mode
     return config
 
