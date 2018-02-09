@@ -4,4 +4,5 @@
 
 from .index import IndexAPI
 from .admin import AdminAPI
+from .article import ArticleAPI 
 from .redirect import RedirectAPI

@@ -8,5 +8,6 @@ from app.handler import *
 urls = [
     web.URLSpec(r"(.+)/$", RedirectAPI, name='redirect'),
     web.URLSpec(r"/admin/?(.*)", AdminAPI, name='admin'),
+    web.URLSpec(r"/article/?(.*)", ArticleAPI, name='article'),
     web.URLSpec(r"/(.*)", IndexAPI, name='index'),
 ]

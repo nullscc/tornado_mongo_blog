@@ -4,8 +4,9 @@
 
 from app.handler.base import BaseHandler
 from tornado.web import HTTPError
+import tornado.web
 
-class RedirectAPI(BaseHandler):
+class RedirectAPI(tornado.web.RequestHandler):
 
     async def get(self, action=''):
         if action:

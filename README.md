@@ -10,3 +10,5 @@
 1. markdown渲染的文本使用redis缓存
 2. 利用redis实现服务器session
 
+# 建立索引
+1. `db.article.ensureIndex({"slug":1}, {"unique": true})`

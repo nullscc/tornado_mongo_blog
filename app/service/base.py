@@ -6,5 +6,5 @@ from app.config import config
 class BaseService():
     def __init__(self):
         self.mongodb = config.mongodb
+        self.result = {'result':True, 'msg': 'ok'}
 
-        

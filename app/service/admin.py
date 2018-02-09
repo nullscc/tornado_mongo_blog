@@ -5,20 +5,26 @@ from .base import BaseService
 from hashlib import md5
 
 class AdminService(BaseService):
+
     async def post_login(self, user_name, user_passwd):
         password_md5 = md5(user_passwd.encode('utf8')).hexdigest()
         user_record = await self.mongodb.user.find_one({'name': user_name})
         if user_record and user_record['passwd'] == password_md5:
-            return True
-        return False
+            return 
+        self.result['result'] = False
+        self.result['msg'] = '用户名或密码错误!'
+
     async def post_register(self, user_name, user_passwd, user_passwd_repeat):
         if not self.check_passwd_valid(user_passwd, user_passwd_repeat):
-            return False 
+            self.result['result'] = False
+            self.result['msg'] = '两次输入的密码不一致'
+            return
         if await self.check_has_register():
-            return False
+            self.result['result'] = False
+            self.result['msg'] = '当前不开放注册，有需要可联系博主'
+            return
         password_md5 = md5(user_passwd.encode('utf8')).hexdigest()
         self.mongodb.user.insert_one({'name': user_name, 'passwd': password_md5})
-        return True
 
     @staticmethod
     def check_passwd_valid(passwd, passwd_repeat):
