@@ -29,6 +29,10 @@ class ArticleService(BaseService):
             self.result['msg'] = '要编辑的文章不存在'
 
     async def get_articles_by_next_prev(self, prev=False, last_id=''):
+        ''' 
+        @param prev: False 请求上一页，True 请求下一页
+        @param last_id: 此页的最前一个和最后一个，如果为空则代表取首页
+        '''
         limit = 20
         if not last_id:
             articles = await self.mongodb.article.find({}).sort([('_id', -1)]).to_list(limit)
@@ -40,16 +44,27 @@ class ArticleService(BaseService):
                 self.result['result'] = False
                 self.result['msg'] = '参数错误'
                 return
-            articles = await self.mongodb.article.find({'_id':{'$lt':obj_id}}).sort([('_id', -1)]).to_list(limit) 
+            id_filter_string = '$lt'
+            sort_list = [('_id', -1)]
+            if prev:
+                id_filter_string = '$gt'
+                sort_list = [('_id', 1)]
+            articles = await self.mongodb.article.find({'_id':{id_filter_string: obj_id}}).sort(sort_list).to_list(limit) 
+            if prev:
+                articles = articles[::-1]
         if not articles:
             self.result['result'] = False
             self.result['msg'] = '参数错误'
             return
         last_id = articles[-1]['_id']
-        first_id = articles[0]['_id'] 
-        
-        pre_v, nex_t = await multi([self.mongodb.article.find_one({'_id':{'$gt':first_id}}, {'_id':1}),
-            self.mongodb.article.find_one({'_id':{'$lt':first_id}}, {'_id':1})])
-        self.result['info'] = {'last': str(articles[-1]['_id']), 'articles': articles,
-                'has_prev':True if pre_v else False, 'has_next':True if nex_t else False}
+        first_id = articles[0]['_id']
+        return_list = await multi([self.mongodb.article.find({'_id':{'$gte':first_id}}, {'_id':1}).\
+                sort([('_id', 1)]).to_list(1),
+            self.mongodb.article.find({'_id':{'$lte':last_id}}, {'_id':1}).sort([('_id', -1)]).to_list(1)])
+        pre_v = nex_t = None
+        if return_list[0]:
+            pre_v = str(return_list[0][0]['_id'])
+        if return_list[1]:
+            nex_t = str(return_list[1][-1]['_id'])
+        self.result['info'] = {'articles': articles, 'prev':pre_v if pre_v else '', 'next':nex_t if nex_t else ''}
 
