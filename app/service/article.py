@@ -35,7 +35,7 @@ class ArticleService(BaseService):
         '''
         limit = 20
         if not last_id:
-            articles = await self.mongodb.article.find({}).sort([('_id', -1)]).to_list(limit)
+            articles = await self.mongodb.article.find({}, {'content': 0}).sort([('_id', -1)]).to_list(limit)
         else:
             obj_id = None
             try:
@@ -49,7 +49,7 @@ class ArticleService(BaseService):
             if prev:
                 id_filter_string = '$gt'
                 sort_list = [('_id', 1)]
-            articles = await self.mongodb.article.find({'_id':{id_filter_string: obj_id}}).sort(sort_list).to_list(limit) 
+            articles = await self.mongodb.article.find({'_id':{id_filter_string: obj_id}}, {'content': 0}).sort(sort_list).to_list(limit) 
             if prev:
                 articles = articles[::-1]
         if not articles:
