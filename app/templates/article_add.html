@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>文章管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<style type="text/css">
+body {
+    background-color: #eee;
+}
+h1 {
+    text-align: center;
+}
+#content {
+    margin: 10px 100px;
+    background-color: white;
+    padding: 20px;
+}
+
+textarea {
+    width: 80%;
+}
+
+.textinput {
+    width: 50%;
+}
+
+.multiselect {
+    display: inline;
+}
+#allselect {
+    margin: 10px 0;
+}
+.errmsg {
+    color: red;
+}
+.hint {
+    color: green;
+}
+ 
+</style>
+</head>
+
+<body>
+<div id="content">
+<h1>文章创建/编辑</h1>
+    {% if err %}
+    <p class="errmsg">{{msg}}</p>
+    {% endif %}
+    {% if hint %}
+    <p class="hint">{{hint}}</p>
+    {% endif %}
+<form action="" method="post">
+<div>
+    链接：<input class="textinput" type="text" name="slug" {% if info and info.slug%}value="{{info.slug}}" {%if info.status==2%} disabled="disabled"{% endif %}{% endif %}/><br />
+    标题：<input class="textinput" type="text" name="title" {% if info and info.title%}value="{{info.title}}"{% endif %}/><br />
+    状态：<input {% if info and info.status==1%}checked="true"{% endif %} type="radio" name="status" value="1"/>草稿
+          <input {% if info and info.status==2%}checked="true"{% endif %} type="radio" name="status" value="2"/>发布<br />
+    <div id="allselect">
+    <div class="multiselect">
+    <span class="multitext">分类：</span><select name="catagory" multiple="multiple">
+        {% for catagory in catagories %}
+        <option value="{{catagory.slug}}" {% if info and info.catagory and catagory.title is in(info.catagory)%}selected{% endif %}>{{catagory.title}}</option>
+        {% endfor %}
+    </select>
+    </div>
+    <div class="multiselect">
+    <span class="multitext">标签：</span><select name="tags" multiple="multiple">
+        {% for tag in tags %}
+        <option value="{{tag.name}}"{% if info and info.tags and tag.name is in(info.tags)%}selected{% endif %}>{{tag.name}}</option>
+        {% endfor %}
+    </select><br />
+    </div>
+    </div>
+    引语：<textarea name="lead" rows="10">{% if info and info.title%}{{info.lead}}{% endif %}</textarea><br />
+    正文：<textarea name="content" rows="20">{% if info and info.title%}{{info.content}}{% endif %}</textarea><br />
+    <input type="submit" value="发布"/>
+</div>
+</form>
+</div>
+</body>
+
+</html>

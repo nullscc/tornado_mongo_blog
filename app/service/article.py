@@ -12,10 +12,22 @@ class ArticleService(BaseService):
         info = await self.mongodb.article.find_one({"slug": slug}, {'_id':0})
         if not info:
             self.result['err'] = True
-            self.result['msg'] = 'article for slug:{} not found!'.format(slug)
+            self.result['msg'] = '文章链接:[{}]对应的文章不存在！'.format(slug)
         self.result['info'] = info
+
+    def check_artile_info_valid(self, info):
+        need_string = {'title':'标题', 'slug':'链接', 'status':'文章状态', 'content':'正文'} 
+        for k, v in need_string.items():
+            if k not in info or not info[k].strip():
+                self.result['msg'] = '{}为必填项'.format(v)
+                self.result['err'] = True
+                break
+        
     
     async def add_article(self, article_info):
+        self.check_artile_info_valid(article_info)
+        if self.result['err']:
+            return
         try:
             await self.mongodb.article.insert(article_info)
         except pymongo.errors.DuplicateKeyError:
@@ -23,6 +35,9 @@ class ArticleService(BaseService):
             self.result['msg'] = '不能添加重复的文章链接'
 
     async def edit_article(self, slug, article_info):
+        self.check_artile_info_valid(article_info)
+        if self.result['err']:
+            return
         original_doc = await self.mongodb.article.find_one_and_replace({"slug": slug}, article_info)
         if not original_doc:
             self.result['err'] = True

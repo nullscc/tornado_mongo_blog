@@ -6,6 +6,7 @@
 from .base import BaseHandler
 from app.service import ArticleService
 from tornado.web import HTTPError
+from functools import wraps
 
 class ArticleAPI(BaseHandler):
 
@@ -13,18 +14,25 @@ class ArticleAPI(BaseHandler):
         super(ArticleAPI, self).__init__(*args, **kw)
         self.service = ArticleService()
 
+    async def get_common(self):
+       if 'catagories' not in self.service.result or 'tags' not in self.service.result:
+           self.service.result['catagories'] = await self.service.mongodb.catagory.find({}, {"_id": 0}).to_list(1000)
+           self.service.result['tags'] = await self.service.mongodb.tag.find({}, {"_id": 0}).to_list(1000)
+
     async def get(self, action=''):
+        await self.get_common()
         article_slug = self.get_query_argument("slug", '') 
         if action == 'add':
             if article_slug:
                 await self.service.get_article_info(article_slug)
-                self.write(self.service.result)
+                self.render_html("article_add.html", self.service.result)
             else:
-                self.write("add article page")
+                self.render_html("article_add.html", self.service.result)
         else:
             raise HTTPError(404)
 
     async def post(self, action=''):
+        await self.get_common()
         if action == 'add':
             article_slug = self.get_query_argument("slug", '')
             post_article_info = self.args_2dict(self.request.body_arguments)
@@ -32,9 +40,5 @@ class ArticleAPI(BaseHandler):
                 await self.service.edit_article(article_slug, post_article_info)
             else:
                 await self.service.add_article(post_article_info)
-            self.write(self.service.result) 
+            self.render_html("article_add.html", self.service.result) 
 
-        
-        
-                 
-            
