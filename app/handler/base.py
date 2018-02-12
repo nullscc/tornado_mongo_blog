@@ -18,9 +18,10 @@ class JinJa2():
     def __new__(cls, *args, **kw):
         if not cls._instance:
             cls._instance = super(JinJa2, cls).__new__(cls, *args, **kw)
+            cls._instance.init()
         return cls._instance
     
-    def __init__(self):
+    def init(self):
         template_dirs = [config.template_path]
         self.env = Environment(loader=FileSystemLoader(template_dirs))
         self.env.globals['static_url'] = static_url

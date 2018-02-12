@@ -6,7 +6,30 @@ import pymongo
 from bson import ObjectId
 from tornado.gen import multi
 
+class CommontData():
+    _instance = None
+    def __new__(cls, mongodb):
+        if not cls._instance:
+            cls._instance = super(CommontData, cls).__new__(cls)
+            cls._instance.init(mongodb)
+        return cls._instance
+    
+    def init(self, mongodb):
+        self.mongodb = mongodb
+        self.common = {}
+
+    async def get_common(self):
+        if not self.common:
+           self.common['catagories'] = await self.mongodb.catagory.find({}, {"_id": 0}).to_list(1000)
+           self.common['tags'] = await self.mongodb.tag.find({}, {"_id": 0}).to_list(1000)
+            
+        return self.common
+
+
 class ArticleService(BaseService):
+    def __init__(self):
+        super(ArticleService, self).__init__()
+        self.common = CommontData(self.mongodb)
 
     async def get_article_info(self, slug):
         info = await self.mongodb.article.find_one({"slug": slug}, {'_id':0})

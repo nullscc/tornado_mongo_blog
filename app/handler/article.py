@@ -15,9 +15,9 @@ class ArticleAPI(BaseHandler):
         self.service = ArticleService()
 
     async def get_common(self):
-       if 'catagories' not in self.service.result or 'tags' not in self.service.result:
-           self.service.result['catagories'] = await self.service.mongodb.catagory.find({}, {"_id": 0}).to_list(1000)
-           self.service.result['tags'] = await self.service.mongodb.tag.find({}, {"_id": 0}).to_list(1000)
+       common = await self.service.common.get_common()
+       self.service.result['catagories'] = common['catagories']
+       self.service.result['tags'] = common['tags']
 
     async def get(self, action=''):
         await self.get_common()
