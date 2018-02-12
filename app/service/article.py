@@ -11,7 +11,7 @@ class ArticleService(BaseService):
     async def get_article_info(self, slug):
         info = await self.mongodb.article.find_one({"slug": slug}, {'_id':0})
         if not info:
-            self.result['result'] = False
+            self.result['err'] = True
             self.result['msg'] = 'article for slug:{} not found!'.format(slug)
         self.result['info'] = info
     
@@ -19,13 +19,13 @@ class ArticleService(BaseService):
         try:
             await self.mongodb.article.insert(article_info)
         except pymongo.errors.DuplicateKeyError:
-            self.result['result'] = False
+            self.result['err'] = True
             self.result['msg'] = '不能添加重复的文章链接'
 
     async def edit_article(self, slug, article_info):
         original_doc = await self.mongodb.article.find_one_and_replace({"slug": slug}, article_info)
         if not original_doc:
-            self.result['result'] = False
+            self.result['err'] = True
             self.result['msg'] = '要编辑的文章不存在'
 
     async def get_articles_by_next_prev(self, prev=False, last_id=''):
@@ -41,7 +41,7 @@ class ArticleService(BaseService):
             try:
                 obj_id = ObjectId(last_id) 
             except:
-                self.result['result'] = False
+                self.result['err'] = True
                 self.result['msg'] = '参数错误'
                 return
             id_filter_string = '$lt'
@@ -53,7 +53,7 @@ class ArticleService(BaseService):
             if prev:
                 articles = articles[::-1]
         if not articles:
-            self.result['result'] = False
+            self.result['err'] = True
             self.result['msg'] = '参数错误'
             return
         last_id = articles[-1]['_id']

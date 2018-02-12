@@ -27,6 +27,8 @@ def init_config():
     else:
         mode = os.environ.get('MODE')
     config = load_config(mode)
+    config.static_path= os.path.join(os.path.dirname(os.path.dirname(__file__)), config.static)
+    config.template_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), config.template)
     config.mongodb = motor.motor_tornado.MotorClient(config.mongo_url)[config.mongo_database]
     config.mode = mode
     return config
@@ -38,10 +40,9 @@ def load_setting():
     :return:
     """
     settings = dict(
-         static_path=os.path.join(os.path.dirname(__file__), "static"),
-         template_path=os.path.join(os.path.dirname(__file__), "templates"),
-         debug=config.mode != 'PRODUCTION',
-         cookie_secret = config.cookie_secret,
+        static_path = config.static_path,
+        debug=config.mode != 'PRODUCTION',
+        cookie_secret = config.cookie_secret,
      )
     return settings
 

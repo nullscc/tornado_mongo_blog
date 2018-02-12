@@ -4,7 +4,7 @@
 
 from tornado import web
 from app.handler import *
-
+from app.config import config
 urls = [
     web.URLSpec(r"(.+)/$", RedirectAPI, name='redirect'),
     web.URLSpec(r"/admin/?(.*)", AdminAPI, name='admin'),

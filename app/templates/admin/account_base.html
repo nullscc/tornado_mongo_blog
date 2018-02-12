@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>用户管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css">
+    body {
+        background-color: #eee;
+    }
+    #all {
+        margin-top: 100px;
+    }
+    h1 {
+        text-align: center;
+    }
+    #content {
+        width: 400px;
+        margin: 0px auto;
+        background-color: white;
+    }
+    #formcontent {
+        margin: 10px 0 10px 140px;
+        padding: 20px 0;
+    }
+
+    .errmsg {
+        color: red;
+    }
+    .hint {
+        color: green;
+    }
+</style>
+</head>
+
+<body>
+<div id="all">
+{% block title %}
+<h1>用户登陆</h1>
+{% endblock title %}
+<div id="content">
+<form action="/admin/login" method="post">
+<div id="formcontent">
+    用户名：<br />
+    <input type="text" name="user_name"/><br />
+    密码：<br />
+    <input type="password" name="user_passwd"/><br />
+    {% block accountform_extra %}
+    <input type="submit" value="登陆" onclick="javascript:this.form.action='/admin/login';"/>
+    <a href="/admin/register"><button type="button">注册</button></a>
+    {% endblock accountform_extra %}
+    {% if err %}
+    <p class="errmsg">{{msg}}</p>
+    {% endif %}
+    {% if hint %}
+    <p class="hint">{{hint}}</p>
+    {% endif %}
+</div>
+</form>
+</div>
+</div>
+</body>
+
+
+
+
+
+</html>

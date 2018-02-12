@@ -1,0 +1,9 @@
+{% extends "/admin/account_base.html" %}
+{% block title %}
+<h1>用户注册</h1>
+{% endblock title %}
+{% block accountform_extra %}
+重复密码：<br />
+<input type="password" name="user_passwd_repeat"/><br />
+<input type="submit" value="注册" onclick="javascript:this.form.action='/admin/register';"/>
+{% endblock accountform_extra %}

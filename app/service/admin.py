@@ -11,16 +11,16 @@ class AdminService(BaseService):
         user_record = await self.mongodb.user.find_one({'name': user_name})
         if user_record and user_record['passwd'] == password_md5:
             return 
-        self.result['result'] = False
+        self.result['err'] = True
         self.result['msg'] = '用户名或密码错误!'
 
     async def post_register(self, user_name, user_passwd, user_passwd_repeat):
         if not self.check_passwd_valid(user_passwd, user_passwd_repeat):
-            self.result['result'] = False
+            self.result['err'] = True
             self.result['msg'] = '两次输入的密码不一致'
             return
         if await self.check_has_register():
-            self.result['result'] = False
+            self.result['err'] = True 
             self.result['msg'] = '当前不开放注册，有需要可联系博主'
             return
         password_md5 = md5(user_passwd.encode('utf8')).hexdigest()

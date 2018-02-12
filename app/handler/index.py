@@ -14,8 +14,8 @@ class IndexAPI(BaseHandler):
         if action=='' or action=='prev' or action=='next':
             last_id = self.get_query_argument('last', '')
             await self.service.get_articles_by_next_prev(False if action=='next' else True, last_id)
-            if self.service.result['result']:
-                res = {'result': self.service.result['result'], 'msg': self.service.result['msg'],
+            if not self.service.result['err']:
+                res = {'result': self.service.result['err'], 'msg': self.service.result['msg'],
                         'len': len(self.service.result['info']['articles']),
                         'next':self.service.result['info']['next'],
                         'prev':self.service.result['info']['prev']}
