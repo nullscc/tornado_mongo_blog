@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block articlecontent %}
+{% if tag or catagory %}
+<div id="catagory_or_tag">
+{% if tag %}
+标签：{{tag}}
+{% endif %}
+{% if catagory %}
+分类：{{catagory}}
+{% endif %}
+</div>
+{% endif %}
+{% for article in info.articles %}
+    <div class="single_article">
+    <h2><a href="/{{article.slug}}">{{article.title}}</a></h2>
+        
+    <div class="article_info">
+        {% if article.catagory %}
+        分类于: <span class="catagory">{{article.catagory|join(" | ")}}</span>   
+        {% endif %}
+        {% if article.tags %}
+        标签: <span class="tag">{{article.tags|join(" | ")}}</span>
+        {% endif %}
+
+        {% if article.add_time %}
+        <span class="articl_time">{{article.add_time|strtime}}</span>
+        {% endif %}
+    </div>
+    <div class="article_content">
+        {{article.lead|e}}        
+    </div>
+    <a href="/{{article.slug}}"><button type="button">继续阅读</button></a>
+    </div>
+{% endfor %}
+{% if info.prev %}
+<a href="/prev?last={{info.prev}}"><button type="button">上一页</button></a>
+{% endif %}
+{% if info.next %}
+<a href="/next?last={{info.next}}"><button type="button">下一页</button></a>
+{% endif %}
+{% endblock articlecontent %}
+
+{% block extra_sidebox %}
+<div class="sidebox">
+    <span class="sidebox_title">管理</span>
+    <ul>
+        <li><a href="/article/add">新建</a></li>
+        <li><a href="/admin/logout">注销</a></li>
+    </ul>
+</div>
+{% endblock extra_sidebox %}
+

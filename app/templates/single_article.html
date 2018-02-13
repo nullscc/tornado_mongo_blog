@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block articlecontent %}
+    <div class="single_article">
+    <h2><a href="/{{info.article.slug}}">{{info.article.title}}</a></h2>
+    <div class="article_info">
+        {% if info.article.catagory %}
+        分类于: <span class="catagory">{{info.article.catagory|join(" | ")}}</span>   
+        {% endif %}
+        {% if info.article.tags %}
+        标签: <span class="tag">{{info.article.tags|join(" | ")}}</span>
+        {% endif %}
+
+        {% if info.article.add_time %}
+        <span class="articl_time">{{info.article.add_time|strtime}}</span>
+        {% endif %}
+    </div>
+    <div class="article_content">
+        {{info.article.lead|e}}        
+        {{info.article.content|e}}        
+    </div>
+    </div>
+
+{% if info.prev %}
+<a href="/{{info.prev.slug}}"><button type="button">{{info.prev.title}}</button></a>
+{% endif %}
+{% if info.next %}
+<a href="/{{info.next.slug}}"><button type="button">{{info.next.title}}</button></a>
+{% endif %}
+{% endblock articlecontent %}
+
+{% block extra_sidebox %}
+<div class="sidebox">
+    <span class="sidebox_title">管理</span>
+    <ul>
+        <li><a href="/article/add?slug={{info.article.slug}}">编辑</a></li>
+        <li><a href="/article/add">新建</a></li>
+        <li><a href="/admin/logout">注销</a></li>
+    </ul>
+</div>
+{% endblock extra_sidebox %}
+

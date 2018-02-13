@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf8 -*-
 # Power by null 2018-02-09 10:00:56
-
-
 from .base import BaseHandler
 from app.service import ArticleService
 from tornado.web import HTTPError

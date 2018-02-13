@@ -9,9 +9,15 @@ from tornado.web import HTTPError
 from app.config import config
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 import os
+from datetime import datetime
 
 def static_url(name):
     return os.path.join("/", config.static, name)
+
+def strtime(value):
+    value = int(value)
+    dt = datetime.fromtimestamp(value)
+    return "{}年{}月{}日".format(dt.year, dt.month, dt.day) 
 
 class JinJa2():
     _instance = None
@@ -25,6 +31,7 @@ class JinJa2():
         template_dirs = [config.template_path]
         self.env = Environment(loader=FileSystemLoader(template_dirs))
         self.env.globals['static_url'] = static_url
+        self.env.filters['strtime'] = strtime
     
     def render_html(self, template_name, context_dict):
         try:
