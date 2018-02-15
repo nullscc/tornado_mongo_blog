@@ -28,7 +28,7 @@
         {% endif %}
     </div>
     <div class="article_content">
-        {{article.lead|e}}        
+        {{article.lead|markdown2html}}        
     </div>
     <a href="/{{article.slug}}"><button type="button">继续阅读</button></a>
     </div>

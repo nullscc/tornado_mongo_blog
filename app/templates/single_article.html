@@ -16,8 +16,7 @@
         {% endif %}
     </div>
     <div class="article_content">
-        {{info.article.lead|e}}        
-        {{info.article.content|e}}        
+    {{info.article.html_content.content}}
     </div>
     </div>
 
@@ -28,7 +27,14 @@
 <a href="/{{info.next.slug}}"><button type="button">{{info.next.title}}</button></a>
 {% endif %}
 {% endblock articlecontent %}
-
+{% block toc %}
+{% if info.article.html_content.toc %}
+    <div class="sidebox">
+        <span class="sidebox_title">文章目录</span>
+        {{info.article.html_content.toc}}
+    </div>
+{% endif %}
+{% endblock toc %}
 {% block extra_sidebox %}
 <div class="sidebox">
     <span class="sidebox_title">管理</span>

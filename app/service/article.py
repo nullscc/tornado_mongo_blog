@@ -5,6 +5,7 @@ from .base import BaseService
 import pymongo
 from bson import ObjectId
 from tornado.gen import multi
+import markdown
 
 class CommontData():
     _instance = None
@@ -31,6 +32,17 @@ class ArticleService(BaseService):
         super(ArticleService, self).__init__()
         self.common = CommontData(self.mongodb)
 
+
+    @staticmethod
+    def markdown2html(value):
+        extensions = ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc']
+        md = markdown.Markdown(extensions=extensions)
+        html_content = md.convert(value)
+        if len(md.toc) <=45:
+            md.toc = ''
+        content = {"content":html_content, "toc":md.toc}
+        return content
+
     async def get_article_info(self, slug, need_extra=False):
         info = await self.mongodb.article.find_one({"slug": slug})
         if not info:
@@ -47,6 +59,10 @@ class ArticleService(BaseService):
             pre_v = return_list[0][0]
         if return_list[1]:
             nex_t = return_list[1][0]
+        info['html_content'] = self.markdown2html(info['lead'] + info['content'])
+        del info['lead']
+        del info['content']
+        print(info.keys())
         self.result['info'] = {'article': info, 'prev':pre_v if pre_v else '', 'next':nex_t if nex_t else ''}
 
     def check_artile_info_valid(self, info):

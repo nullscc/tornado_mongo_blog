@@ -9,7 +9,6 @@ from tornado.options import define, options
 import motor
 
 define("mode", default="", help="mode", type=str)
-tornado.options.parse_command_line()
 
 def load_config(mode):
     """加载配置类"""

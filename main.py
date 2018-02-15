@@ -9,7 +9,7 @@ import tornado.web
 from tornado.options import define, options
 from app.config import load_setting 
 
-define("port", default=5555, help="run on the given port", type=int)
+define("port", default=8000, help="run on the given port", type=int)
 tornado.options.parse_command_line()
 
 class Application(tornado.web.Application):
