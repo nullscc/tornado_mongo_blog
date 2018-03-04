@@ -31,13 +31,22 @@ article {
     margin: 0;
 }
 
-.sidebox > ul, .tag-cloud {
+.sidebox > ul, .tag-cloud, .toc {
     margin: 0;
     list-style: none;
     padding: 0;
     border-top: solid 3px #ea5c56;
 }
 
+.toc {
+    border-top: solid 1px #ea5c56;
+}
+
+blockquote {
+    font-style: italic;
+    border-left: solid 3px #ea5c56;
+    padding-left: .8em;
+}
 
 .sidebox h4:first-child {
     font-style: italic; 
@@ -101,8 +110,16 @@ a, a:hover {
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-{% if tag or catagory %}
+{% if tag or catagory or status%}
 <div class="catagory_or_tag">
+{% if status %}
+{% if status is eq 1 %}
+  <ol class="breadcrumb bg-light">
+    <li class="breadcrumb-item">分类</li>
+    <li class="breadcrumb-item">草稿</li>
+  </ol>
+{% endif %}
+{% endif %}
 {% if tag %}
   <ol class="breadcrumb bg-light">
     <li class="breadcrumb-item">标签</li>

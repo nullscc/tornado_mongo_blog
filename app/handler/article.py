@@ -38,6 +38,10 @@ class ArticleAPI(BaseHandler):
 
     def get_valid_article_info(self):
         info = self.args_2dict(self.request.body_arguments)
+        if isinstance(info["tags"], str):
+            info["tags"] = [info["tags"],]
+        if isinstance(info["catagory"], str):
+            info["catagory"] = [info["catagory"],]
         return info
 
     async def post(self, action=''):

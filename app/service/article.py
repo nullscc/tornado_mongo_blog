@@ -71,7 +71,8 @@ class ArticleService(BaseService):
             if k not in info or not info[k].strip():
                 self.result['msg'] = '{}为必填项'.format(v)
                 self.result['err'] = True
-                break
+                return
+        info["status"] = int(info["status"])  
    
     async def del_one_article(self, slug):
         res = await self.mongodb.article.delete_one({'slug':slug})
@@ -95,12 +96,12 @@ class ArticleService(BaseService):
             self.result['err'] = True
             self.result['msg'] = '要编辑的文章不存在'
 
-    async def get_articles_by_next_prev(self, prev=False, last_id='', tag_name='', catagory_name=''):
+    async def get_articles_by_next_prev(self, prev=False, last_id='', tag_name='', catagory_name='', status=2):
         ''' 
         @param prev: False 请求上一页，True 请求下一页
         @param last_id: 此页的最前一个和最后一个，如果为空则代表取首页
         '''
-        extra_find_dict = {}
+        extra_find_dict = {"status": status}
         if tag_name:
             extra_find_dict = {"tags":tag_name}
         if catagory_name:

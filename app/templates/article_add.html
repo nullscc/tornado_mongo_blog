@@ -56,8 +56,8 @@ textarea {
     链接：<input class="textinput" type="text" name="sslug" {% if info and info.slug%}value="{{info.slug}}" {%if info.status==2%} disabled="disabled"{% endif %}{% endif %}/><br />
     <input type="hidden" name="slug" {% if info and info.slug%}value="{{info.slug}}"{% endif %}/>
     标题：<input class="textinput" type="text" name="title" {% if info and info.title%}value="{{info.title}}"{% endif %}/><br />
-    状态：<input {% if info and info.status is eq '1' %}checked="true"{% endif %} type="radio" name="status" value="1"/>草稿
-          <input {% if info and info.status is eq '2' %}checked="true"{% endif %} type="radio" name="status" value="2"/>发布<br />
+    状态：<input {% if info and info.status is eq 1 %}checked="true"{% endif %} type="radio" name="status" value="1"/>草稿
+          <input {% if info and info.status is eq 2 %}checked="true"{% endif %} type="radio" name="status" value="2"/>发布<br />
     <div id="allselect">
     <div class="multiselect">
     <span class="multitext">分类：</span><select name="catagory" multiple="multiple">

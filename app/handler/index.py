@@ -22,7 +22,7 @@ class IndexAPI(BaseHandler):
             await self.service.get_articles_by_next_prev(False if action=='next' else True, last_id)
             if not self.service.result['err']:
                 self.render_html("index.html", self.service.result)
-        elif action=='tags' or action=='catagories':
+        elif action=='tags' or action=='catagories' or action=='drafts':
             last_id = self.get_query_argument('last', '')
             prev = True if int(self.get_query_argument('prev', 0)) else False
             name = self.get_query_argument('name', '')
@@ -30,9 +30,12 @@ class IndexAPI(BaseHandler):
                 if action=='tags':
                     await self.service.get_articles_by_next_prev(prev, last_id, tag_name=name)
                     self.render_html("index.html", self.service.result, tag=name)
-                else:
+                elif action=='catagories':
                     await self.service.get_articles_by_next_prev(prev, last_id, catagory_name=name)
                     self.render_html("index.html", self.service.result, catagory=name)
+                elif action=='drafts':
+                    await self.service.get_articles_by_next_prev(prev, last_id, status=1)
+                    self.render_html("index.html", self.service.result, status=1)
         else:
             await self.service.get_article_info(action, True)
             if self.service.result['err']:
