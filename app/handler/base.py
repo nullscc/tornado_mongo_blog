@@ -104,7 +104,11 @@ class BaseHandler(tornado.web.RequestHandler):
                 args_dict[k] = v
     
         return args_dict
-    
+
+    def write_error(self, status_code, **kwargs):
+        if status_code == 404:
+            self.render_html("404.html")
+
     def render_html(self, template_name, context_dict=None, **kw):
         if not context_dict:
             context_dict = {}

@@ -49,6 +49,7 @@ class ArticleService(BaseService):
         if not info:
             self.result['err'] = True
             self.result['msg'] = '文章链接:[{}]对应的文章不存在！'.format(slug)
+            return
         if not need_extra:
             self.result['info'] = info
             return

@@ -27,11 +27,18 @@ class IndexAPI(BaseHandler):
             prev = True if int(self.get_query_argument('prev', 0)) else False
             name = self.get_query_argument('name', '')
             if not self.service.result['err']:
+                if action=='tags' or action=='catagories':
+                    if not name:
+                        raise HTTPError(404)
                 if action=='tags':
                     await self.service.get_articles_by_next_prev(prev, last_id, tag_name=name)
+                    if self.service.result['err']:
+                        raise HTTPError(404)
                     self.render_html("index.html", self.service.result, tag=name)
                 elif action=='catagories':
                     await self.service.get_articles_by_next_prev(prev, last_id, catagory_name=name)
+                    if self.service.result['err']:
+                        raise HTTPError(404)
                     self.render_html("index.html", self.service.result, catagory=name)
                 elif action=='drafts':
                     await self.service.get_articles_by_next_prev(prev, last_id, status=1)
