@@ -26,17 +26,31 @@ class ArticleAPI(BaseHandler):
                 self.render_html("article_add.html", self.service.result)
             else:
                 self.render_html("article_add.html", self.service.result)
+        elif action == 'del':
+            await self.service.del_one_article(article_slug)
+            if not self.service.result['err']:
+                self.redirect("/")
+                return
+            
+            raise HTTPError(500)
         else:
             raise HTTPError(404)
+
+    def get_valid_article_info(self):
+        info = self.args_2dict(self.request.body_arguments)
+        return info
 
     async def post(self, action=''):
         await self.get_common()
         if action == 'add':
             article_slug = self.get_query_argument("slug", '')
-            post_article_info = self.args_2dict(self.request.body_arguments)
+            post_article_info = self.get_valid_article_info()
             if article_slug:
                 await self.service.edit_article(article_slug, post_article_info)
             else:
                 await self.service.add_article(post_article_info)
+            if not self.service.result['err']:
+                self.redirect("/{}".format(post_article_info['slug']))
+                return
             self.render_html("article_add.html", self.service.result) 
 

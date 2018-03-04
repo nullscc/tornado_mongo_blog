@@ -35,7 +35,8 @@ class ArticleService(BaseService):
 
     @staticmethod
     def markdown2html(value):
-        extensions = ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc']
+        extensions = ['markdown.extensions.extra', 'markdown.extensions.codehilite','markdown.extensions.tables','markdown.extensions.toc']
+
         md = markdown.Markdown(extensions=extensions)
         html_content = md.convert(value)
         if len(md.toc) <=45:
@@ -59,10 +60,9 @@ class ArticleService(BaseService):
             pre_v = return_list[0][0]
         if return_list[1]:
             nex_t = return_list[1][0]
-        info['html_content'] = self.markdown2html(info['lead'] + info['content'])
+        info['html_content'] = self.markdown2html(info['lead'] + "\n" + info['content'])
         del info['lead']
         del info['content']
-        print(info.keys())
         self.result['info'] = {'article': info, 'prev':pre_v if pre_v else '', 'next':nex_t if nex_t else ''}
 
     def check_artile_info_valid(self, info):
@@ -72,8 +72,10 @@ class ArticleService(BaseService):
                 self.result['msg'] = '{}为必填项'.format(v)
                 self.result['err'] = True
                 break
-        
-    
+   
+    async def del_one_article(self, slug):
+        res = await self.mongodb.article.delete_one({'slug':slug})
+   
     async def add_article(self, article_info):
         self.check_artile_info_valid(article_info)
         if self.result['err']:

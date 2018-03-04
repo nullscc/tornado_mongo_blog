@@ -25,6 +25,21 @@ def markdown2html(value):
     md = markdown.Markdown(extensions=extensions)
     return md.convert(value)
 
+def join_nstr(value, d='', cata="catagories"):
+    if isinstance(value, str):
+        return '<a href="/{}?name={}">'.format(cata, value) + value + '</a>'
+    res = ''
+    it = iter(value)
+    next_value = next(it)
+    try:
+        while True:
+            res += '<a href="/{}?name={}">'.format(cata, next_value) + next_value + '</a>'
+            next_value = next(it)
+            res += ' | '
+    except:
+        pass
+    return res
+            
 class JinJa2():
     _instance = None
     def __new__(cls, *args, **kw):
@@ -39,6 +54,7 @@ class JinJa2():
         self.env.globals['static_url'] = static_url
         self.env.filters['strtime'] = strtime
         self.env.filters['markdown2html'] = markdown2html
+        self.env.filters['join_nstr'] = join_nstr
     
     def render_html(self, template_name, context_dict):
         try:
@@ -80,6 +96,10 @@ class BaseHandler(tornado.web.RequestHandler):
                 args_dict[k] = v[0].decode()
             elif isinstance(v, list) and len(v) == 0:
                 args_dict[k] = ''
+            elif isinstance(v, list) and len(v) > 1:
+                args_dict[k] = []
+                for item in v:
+                    args_dict[k].append(item.decode())
             else:
                 args_dict[k] = v
     

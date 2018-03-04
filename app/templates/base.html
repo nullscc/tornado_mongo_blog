@@ -1,81 +1,146 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html>
 <head>
 <title>一只特立独行的猪</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </body>
 <style type="text/css">
-#articlecontent {
-    margin-right: 300px;
+header h1 a {
+      text-shadow: -.2rem .2rem .2rem #aaa;
 }
-body {
-    margin: 10px;
+header h1 a:hover {
+    text-decoration: none; 
+}
+article {
+    border-bottom: solid 1px #eee;
 }
 
-#sidebar {
-    width: 290px;
-    position: absolute;
-    right: 0;
-    top: 190px;
-    background-color: red;
-    margin-right: 10px;
+.sidebox {
+    margin-bottom: .5rem;
 }
-#head {
-    height: 180px;
-    background-color: yellow;
-}
-#head h1 {
-    margin-top: 10px;
-}
-#nav {
-    list-style-type:none;
-    margin: 0;
+
+.toc ul {
+    list-style: none;
+    margin-left: 1.5rem;
     padding: 0;
 }
-#nav li {
-    display: inline;
+
+.toc > ul {
+    margin: 0;
 }
-.sidebox {
-    margin: 5px;
-    background-color: cyan;
+
+.sidebox > ul, .tag-cloud {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    border-top: solid 3px #ea5c56;
 }
-.single_article {
-    background-color: cyan;
-    margin-bottom: 10px;
+
+
+.sidebox h4:first-child {
+    font-style: italic; 
+    text-align: center;
+    background-color: #ea5c56;
+    border-bottom: #ea5c56;
+    width: 7rem;
+    margin-bottom: 0;
 }
-.single_article h2 {
-    margin-top: 0;
+
+pre {
+    border-radius: .5em;
+    padding: 1em;
+    overflow-y: auto;
+    border: dashed 2px #eee;
 }
-#catagory_or_tag {
-    background-color: blue;         
-    margin-bottom: 10px;
+
+@media (min-width: 800px) {
+    aside {
+        position: absolute;
+        width: 20rem;
+        right: 0;
+        top: 0;
+    }
+    
+    main {
+        margin-right: 21rem;
+    }    
+    .leftside {
+        position: relative;
+    }
+} 
+
+.catagory_or_tag * {
+    padding: 0;
+    margin: 0;
+}
+
+a, a:hover {
+    color: #ef6a2d;
+}
+
+#navbarSupportedContent .navbar-nav {
+    font-size: 1.5rem;
+}
+
+.slogen {
+    margin-left: 1rem; 
 }
 </style>
 </head>
 
 <body>
-<div id="allcontent">
-    <div id="head">
+<div class="container-fluid">
+    <header>
         <h1><a href="/">一只特立独行的猪</a></h1>
-        <span id="descen">一个细节足以改变一生</span><br />
-        <span id="desczh">a detail can change one's life.</span>
-    
-    <ul id="nav">
-        <li><a href="/">主页</a></li>
-        <li><a href="">关于</a></li>
+        <div class="slogen text-muted">——所有人都是对的?</div>
+<nav class="navbar navbar-expand navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+{% if tag or catagory %}
+<div class="catagory_or_tag">
+{% if tag %}
+  <ol class="breadcrumb bg-light">
+    <li class="breadcrumb-item">标签</li>
+    <li class="breadcrumb-item">{{tag}}</li>
+  </ol>
+{% endif %}
+{% if catagory %}
+  <ol class="breadcrumb bg-light">
+    <li class="breadcrumb-item">分类</li>
+    <li class="breadcrumb-item">{{catagory}}</li>
+  </ol>
+{% endif %}
+</div>
+{% endif %}
+
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">主页</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">关于</a>
+      </li>
     </ul>
-    </div>
-    
-    <div id="articlecontent">
+  </div>
+</nav>
+    </header>
+<div class="leftside"> 
+    <main>
     {% block articlecontent %}
     {% endblock articlecontent %}
-    </div>
-    <div id="sidebar">
+    </main>
+
+    <aside>
     {% block toc %}
     
     {% endblock toc %}
     <div class="sidebox">
-        <span class="sidebox_title">分类</span>
+        <h4>分类</h4>
         <ul>
         {% for catagory in catagories %}
         <li><a href="/catagories?name={{catagory.title}}">{{catagory.title}}</a></li>
@@ -83,20 +148,24 @@ body {
         </ul>
     </div>
     <div class="sidebox">
-        <span class="sidebox_title">标签</span>
-        <ul>
+        <h4>标签</h4>
+        <div class="tag-cloud">
+        {% set button_color = cycler('primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark') %}
         {% for tag in tags %}
-        <li><a href="/tags?name={{tag.name}}">{{tag.name}}</a></li>
+        <a class="btn btn-sm btn-{{button_color.next()}} my-1" href="/tags?name={{tag.name}}" role="button">{{tag.name}}</a>
         {% endfor %}
-        </ul>
+        </div>
     </div>
     {% block extra_sidebox %}
     {% endblock extra_sidebox %}
-    </div>
+    </aside>
 
 </div>
-
-</body>
+</div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
 
 </html>
 

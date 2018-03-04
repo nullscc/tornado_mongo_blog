@@ -1,46 +1,39 @@
 {% extends "base.html" %}
+{% import "_article_head.html" as article_head %}
 
 {% block articlecontent %}
-    <div class="single_article">
-    <h2><a href="/{{info.article.slug}}">{{info.article.title}}</a></h2>
-    <div class="article_info">
-        {% if info.article.catagory %}
-        分类于: <span class="catagory">{{info.article.catagory|join(" | ")}}</span>   
-        {% endif %}
-        {% if info.article.tags %}
-        标签: <span class="tag">{{info.article.tags|join(" | ")}}</span>
-        {% endif %}
-
-        {% if info.article.add_time %}
-        <span class="articl_time">{{info.article.add_time|strtime}}</span>
-        {% endif %}
-    </div>
-    <div class="article_content">
+    {{ article_head.article_head(info.article) }}
+    <div class="article-content mt-4">
     {{info.article.html_content.content}}
     </div>
-    </div>
+    </article>
 
+<div class="d-flex mt-2 prev-next w-100">
 {% if info.prev %}
-<a href="/{{info.prev.slug}}"><button type="button">{{info.prev.title}}</button></a>
+<a class="mr-auto" href="/{{info.prev.slug}}">{{info.prev.title}}</a>
 {% endif %}
 {% if info.next %}
-<a href="/{{info.next.slug}}"><button type="button">{{info.next.title}}</button></a>
+<a class="ml-auto" href="/{{info.next.slug}}">{{info.next.title}}</a>
 {% endif %}
+</div>
 {% endblock articlecontent %}
 {% block toc %}
 {% if info.article.html_content.toc %}
     <div class="sidebox">
-        <span class="sidebox_title">文章目录</span>
+        <h4>文章目录</h4>
+        <div class="toc">
         {{info.article.html_content.toc}}
+        </div>
     </div>
 {% endif %}
 {% endblock toc %}
 {% block extra_sidebox %}
 <div class="sidebox">
-    <span class="sidebox_title">管理</span>
+    <h4>管理</h4>
     <ul>
         <li><a href="/article/add?slug={{info.article.slug}}">编辑</a></li>
         <li><a href="/article/add">新建</a></li>
+        <li><a href="/article/del?slug={{info.article.slug}}">删除</a></li>
         <li><a href="/admin/logout">注销</a></li>
     </ul>
 </div>

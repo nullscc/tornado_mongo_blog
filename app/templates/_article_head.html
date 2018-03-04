@@ -1,0 +1,20 @@
+{% macro article_head(article) %}
+<article class="px-2 pb-2 mt-2">
+    <h2><a href="/{{article.slug}}">{{article.title}}</a></h2>
+        
+    <small class="text-muted d-flex">
+        <div class="mr-auto">
+        {% if article.catagory %}
+        分类于: {{article.catagory|join_nstr(" | ", "catagories")}}
+        {% endif %}
+        {% if article.tags %}
+        标签: <span>{{article.tags|join_nstr(" | ", "tags")}}</span>
+        {% endif %}
+        </div>
+        <div>
+        {% if article.add_time %}
+        <span>{{article.add_time|strtime}}</span>
+        {% endif %}
+        </div>
+    </small>
+{% endmacro %}
