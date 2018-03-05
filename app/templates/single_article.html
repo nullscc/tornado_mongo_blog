@@ -28,6 +28,7 @@
 {% endif %}
 {% endblock toc %}
 {% block extra_sidebox %}
+{% if current_user %}
 <div class="sidebox">
     <h4>管理</h4>
     <ul>
@@ -38,5 +39,6 @@
         <li><a href="/drafts">草稿</a></li>
     </ul>
 </div>
+{% endif %}
 {% endblock extra_sidebox %}
 

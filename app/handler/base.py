@@ -113,6 +113,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if not context_dict:
             context_dict = {}
         context_dict.update(kw)
+        context_dict.update({"current_user":self.get_current_user()})
         content = self.jinja.render_html(template_name, context_dict)
         self.write(content)
 

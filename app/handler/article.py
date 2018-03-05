@@ -19,6 +19,8 @@ class ArticleAPI(BaseHandler):
 
     async def get(self, action=''):
         await self.get_common()
+        if not self.get_current_user():
+            raise HTTPError(404)
         article_slug = self.get_query_argument("slug", '') 
         if action == 'add':
             if article_slug:
@@ -46,6 +48,8 @@ class ArticleAPI(BaseHandler):
 
     async def post(self, action=''):
         await self.get_common()
+        if not self.get_current_user():
+            raise HTTPError(404)
         if action == 'add':
             article_slug = self.get_query_argument("slug", '')
             post_article_info = self.get_valid_article_info()

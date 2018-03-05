@@ -41,6 +41,8 @@ class IndexAPI(BaseHandler):
                         raise HTTPError(404)
                     self.render_html("index.html", self.service.result, catagory=name)
                 elif action=='drafts':
+                    if not self.get_current_user():
+                        raise HTTPError(404)
                     await self.service.get_articles_by_next_prev(prev, last_id, status=1)
                     self.render_html("index.html", self.service.result, status=1)
         else:
